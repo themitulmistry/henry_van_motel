@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Henry Van Motel</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #1a2332;
+      --gold: #c9a84c;
+      --offwhite: #f8f6f1;
+      --mid: #6b7280;
+      --dark: #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--navy);
+      padding: 1.2rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #fff !important;
+      letter-spacing: 0.06em;
+    }
+    .navbar-brand span {
+      color: var(--gold);
+    }
+    .navbar-toggler {
+      border-color: rgba(255,255,255,0.3);
+    }
+    .navbar-toggler-icon {
+      filter: invert(1);
+    }
+    .nav-link {
+      color: rgba(255,255,255,0.82) !important;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem !important;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--gold) !important;
+    }
+    .dropdown-menu {
+      background: var(--navy);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 0;
+      min-width: 160px;
+    }
+    .dropdown-item {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.2rem;
+    }
+    .dropdown-item:hover {
+      background: rgba(201,168,76,0.1);
+      color: var(--gold);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 92vh;
+      min-height: 560px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide:nth-child(1) {
+      background-image: url('DSC_1314.JPG');
+    }
+    .hero-slide:nth-child(2) {
+      background-image: url('DSC_1317.JPG');
+    }
+    .hero-slide:nth-child(3) {
+      background-image: url('DSC_1303.JPG');
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,35,50,0.5) 0%, rgba(26,35,50,0.3) 60%, rgba(26,35,50,0.65) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      padding: 0 1rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+    .btn-gold {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.75rem 2.2rem;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-gold:hover {
+      background: var(--gold);
+      color: #fff;
+    }
+    .hero-dots {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+    .hero-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s;
+    }
+    .hero-dot.active { background: var(--gold); }
+
+    /* ── INTRO STRIP ── */
+    .intro-strip {
+      background: var(--navy);
+      color: #fff;
+      padding: 3.5rem 0;
+    }
+    .intro-strip p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.88);
+      margin: 0;
+    }
+    .gold-line {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── SECTION GENERIC ── */
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .section-body {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--mid);
+    }
+
+    /* ── PORTFOLIO GRID ── */
+    .portfolio-section { padding: 6rem 0; background: var(--offwhite); }
+    .portfolio-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .portfolio-card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      display: block;
+    }
+    .portfolio-card:hover img { transform: scale(1.05); }
+    .portfolio-card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(26,35,50,0.85));
+      color: #fff;
+      padding: 2rem 1.2rem 1.2rem;
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+    }
+    .portfolio-card:hover .portfolio-card-info { transform: translateY(0); }
+    .portfolio-card-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.1rem;
+      background: #fff;
+    }
+    .portfolio-card-label span {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
+      font-weight: 500;
+    }
+    .portfolio-card-label i { color: var(--gold); font-size: 0.85rem; }
+
+    /* ── STATS ── */
+    .stats-section {
+      background: var(--navy);
+      padding: 5rem 0;
+    }
+    .stat-item { text-align: center; padding: 1.5rem; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-top: 0.5rem;
+    }
+    .stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.12);
+      align-self: stretch;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-section { padding: 6rem 0; background: #fff; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 8px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item.tall img { height: 448px; }
+    .gallery-item.wide { grid-column: span 2; }
+    .gallery-item.wide img { height: 220px; }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item.tall img { height: 200px; }
+      .gallery-item img { height: 160px; }
+      .gallery-item.wide { grid-column: span 1; }
+    }
+
+    /* ── ABOUT ── */
+    .about-section { padding: 6rem 0; }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+    }
+    .about-accent {
+      position: absolute;
+      bottom: -24px; right: -24px;
+      width: 60%;
+      aspect-ratio: 1;
+      border: 2px solid var(--gold);
+      z-index: -1;
+    }
+
+    /* ── SERVICES ── */
+    .services-section { padding: 6rem 0; background: var(--offwhite); }
+    .service-card {
+      background: #fff;
+      padding: 2.2rem 1.8rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      height: 100%;
+    }
+    .service-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .service-icon {
+      width: 48px; height: 48px;
+      background: rgba(201,168,76,0.12);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+    .service-icon i { color: var(--gold); font-size: 1.1rem; }
+    .service-card h5 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+    }
+    .service-card p {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--mid);
+      margin: 0;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section { padding: 6rem 0; }
+    .contact-form .form-control, .contact-form .form-select {
+      border: 1px solid #e0ddd8;
+      border-radius: 0;
+      padding: 0.75rem 1rem;
+      font-size: 0.88rem;
+      background: var(--offwhite);
+      transition: border-color 0.2s;
+    }
+    .contact-form .form-control:focus, .contact-form .form-select:focus {
+      border-color: var(--gold);
+      box-shadow: none;
+      background: #fff;
+    }
+    .contact-form textarea { min-height: 130px; }
+    .btn-navy {
+      background: var(--navy);
+      color: #fff;
+      border: 1px solid var(--navy);
+      border-radius: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.5rem;
+      transition: all 0.25s;
+    }
+    .btn-navy:hover {
+      background: transparent;
+      color: var(--navy);
+    }
+    .contact-info-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      align-items: flex-start;
+    }
+    .contact-info-item i {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-top: 0.15rem;
+    }
+    .contact-info-item h6 {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.3rem;
+    }
+    .contact-info-item p {
+      font-size: 0.9rem;
+      color: var(--navy);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.55);
+      padding: 3rem 0 2rem;
+      font-size: 0.82rem;
+    }
+    footer .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+    }
+    footer .brand span { color: var(--gold); }
+    footer a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--gold); }
+    footer ul { list-style: none; padding: 0; margin: 0; }
+    footer ul li { margin-bottom: 0.5rem; }
+    .footer-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1rem;
+    }
+    .footer-divider {
+      border-color: rgba(255,255,255,0.08);
+      margin: 2rem 0 1.2rem;
+    }
+    .social-links a {
+      width: 34px; height: 34px;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-links a:hover { border-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .about-accent { display: none; }
+      .stat-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">Henry Van <span>Motel</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+      <ul class="navbar-nav align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Portfolio</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Extended Stay</a></li>
+            <li><a class="dropdown-item" href="#">Economy</a></li>
+            <li><a class="dropdown-item" href="#">In Development</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Est. 2008 — Hospitality & Development</p>
+    <h1 class="hero-title">Henry Van Motel</h1>
+    <p class="hero-sub">A privately held hospitality company dedicated to exceptional motel development and guest-first management.</p>
+    <a href="#portfolio" class="btn-gold">View Our Portfolio</a>
+  </div>
+  <div class="hero-dots">
+    <button class="hero-dot active" onclick="goSlide(0)"></button>
+    <button class="hero-dot" onclick="goSlide(1)"></button>
+    <button class="hero-dot" onclick="goSlide(2)"></button>
+  </div>
+</section>
+
+<!-- INTRO STRIP -->
+<section class="intro-strip">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <div class="gold-line mx-auto"></div>
+        <p>Henry Van Motel is built on a straightforward promise — clean rooms, honest value, and properties that communities can rely on. From acquisition to day-to-day operations, we take care of every detail.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row align-items-stretch text-center g-0">
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="stat-num">18</div>
+          <div class="stat-label">Properties</div>
+        </div>
+      </div>
+      <div class="col-auto d-none d-md-block">
+        <div class="stat-divider"></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="stat-num">5</div>
+          <div class="stat-label">States</div>
+        </div>
+      </div>
+      <div class="col-auto d-none d-md-block">
+        <div class="stat-divider"></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="stat-num">1,200+</div>
+          <div class="stat-label">Keys Managed</div>
+        </div>
+      </div>
+      <div class="col-auto d-none d-md-block">
+        <div class="stat-divider"></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio-section" id="portfolio">
+  <div class="container">
+    <div class="row mb-5 align-items-end">
+      <div class="col-md-7">
+        <p class="section-label">Our Properties</p>
+        <h2 class="section-title mb-0">A Growing Portfolio Across the Region</h2>
+      </div>
+      <div class="col-md-5 text-md-end mt-3 mt-md-0">
+        <a href="#" class="btn-gold">View All Properties</a>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1306.JPG" alt="Henry Van Motel — Exterior" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>Route 22, New York</small>
+            <p class="mb-0 fw-light">Henry Van Motel — Charming yellow exterior surrounded by lush greenery on Route 22.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>Exterior — Route 22</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1289.JPG" alt="King Room" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>King Room</small>
+            <p class="mb-0 fw-light">Spacious king room with warm amber accent wall, dual bedside lamps, and private en-suite bathroom.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>King Room</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1272.JPG" alt="Double Queen Room" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>Double Queen Room</small>
+            <p class="mb-0 fw-light">Two queen beds with classic wood headboards, decorative quilts, and warm nightstand lighting.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>Double Queen Room</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1274.JPG" alt="Room Amenities" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>Room Amenities</small>
+            <p class="mb-0 fw-light">Each room features a flat-screen TV, work desk, mini-fridge, and full-length mirror.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>In-Room Amenities</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1279.JPG" alt="Standard Double Room" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>Standard Double Room</small>
+            <p class="mb-0 fw-light">Bright and clean double room with contemporary floral wall art and blackout curtains.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>Standard Double Room</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="portfolio-card">
+          <img src="DSC_1278.JPG" alt="Flat Screen TV & Seating" loading="lazy" />
+          <div class="portfolio-card-info">
+            <small>Entertainment & Workspace</small>
+            <p class="mb-0 fw-light">Wall-mounted flat-screen TV, comfortable seating area, and dining table in select rooms.</p>
+          </div>
+          <div class="portfolio-card-label">
+            <span>Entertainment & Workspace</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+    <div class="row mb-5 align-items-end">
+      <div class="col-md-7">
+        <p class="section-label">Photo Gallery</p>
+        <h2 class="section-title mb-0">See What Awaits You</h2>
+      </div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item tall">
+        <img src="DSC_1292.JPG" alt="King Bed Room" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="DSC_1284.JPG" alt="Double Room" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="DSC_1287.JPG" alt="Room with TV and Fridge" loading="lazy" />
+      </div>
+      <div class="gallery-item tall">
+        <img src="DSC_1275.JPG" alt="Motel Grounds" loading="lazy" />
+      </div>
+      <div class="gallery-item wide">
+        <img src="DSC_1296.JPG" alt="Room Interior" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="DSC_1294.JPG" alt="Bathroom" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="DSC_1298.JPG" alt="Motel Exterior Side" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <div class="about-img-wrap">
+          <img src="DSC_1319.JPG" alt="Henry Van Motel reception" />
+          <div class="about-accent"></div>
+        </div>
+      </div>
+      <div class="col-lg-6 offset-lg-1">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">Built on a Foundation of Value and Trust</h2>
+        <p class="section-body mb-3">Henry Van Motel was founded on a simple principle: every traveler deserves a clean, safe, and comfortable place to rest. Since 2008, we have grown from a single roadside property in Ohio to a regional portfolio spanning five states.</p>
+        <p class="section-body mb-4">We handle acquisition, permitting, renovation, and daily operations in-house, allowing us to maintain standards and move quickly on new opportunities. Our team of 80 hospitality professionals keeps every property running at its best.</p>
+        <a href="#contact" class="btn-gold">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-6">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title mb-0">End-to-End Motel Solutions</h2>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-magnifying-glass-dollar"></i></div>
+          <h5>Acquisitions</h5>
+          <p>We identify underperforming properties with strong location fundamentals and acquire them for repositioning.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+          <h5>Development</h5>
+          <p>Ground-up motel development from site selection and permitting through construction management.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-gears"></i></div>
+          <h5>Operations</h5>
+          <p>Full-service property management: staffing, housekeeping, maintenance, revenue management, and guest experience.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h5>Consulting</h5>
+          <p>Advisory services for independent motel owners looking to improve occupancy, margins, or prepare for sale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">Let's Talk</h2>
+        <p class="section-body mb-4">Whether you're a property owner looking to sell, an investor interested in partnership, or have a service inquiry — we'd love to hear from you.</p>
+        <div class="contact-info-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <div>
+            <h6>Head Office</h6>
+            <p>1425 Commerce Drive, Suite 300<br />Toledo, OH 43604</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fa-solid fa-phone"></i>
+          <div>
+            <h6>Phone</h6>
+            <p>(419) 555-0182</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fa-solid fa-envelope"></i>
+          <div>
+            <h6>Email</h6>
+            <p>info@henryvanmotel.com</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 offset-lg-1">
+        <form class="contact-form">
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <input type="text" class="form-control" placeholder="First Name" />
+            </div>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" placeholder="Last Name" />
+            </div>
+            <div class="col-12">
+              <input type="email" class="form-control" placeholder="Email Address" />
+            </div>
+            <div class="col-12">
+              <select class="form-select">
+                <option value="" disabled selected>Subject</option>
+                <option>Property Acquisition</option>
+                <option>Investment Inquiry</option>
+                <option>Management Services</option>
+                <option>Consulting</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <textarea class="form-control" placeholder="Your message…"></textarea>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn-navy">Send Message</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="brand">Henry Van <span>Motel</span></div>
+        <p class="mb-3" style="font-size:0.85rem;">A regional motel development and management company headquartered in Toledo, Ohio.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1">
+        <p class="footer-title">Company</p>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <p class="footer-title">Portfolio</p>
+        <ul>
+          <li><a href="#">Ohio</a></li>
+          <li><a href="#">Pennsylvania</a></li>
+          <li><a href="#">Michigan</a></li>
+          <li><a href="#">In Development</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-3">
+        <p class="footer-title">Contact</p>
+        <p style="line-height:1.8;">1425 Commerce Drive, Suite 300<br />Toledo, OH 43604<br />(419) 555-0182<br />info@henryvanmotel.com</p>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <span>&copy; 2024 Henry Van Motel. All rights reserved.</span>
+      <span><a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Use</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Hero slideshow
+  let current = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+
+  function goSlide(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  setInterval(() => goSlide((current + 1) % slides.length), 5000);
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
